@@ -1,0 +1,12 @@
+[Unit]
+Description=Kubeoven Cache
+
+[Service]
+ExecStart=/usr/local/bin/caddy file-server \
+  --listen :8383 \
+  --root /var/cache/kubeoven
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

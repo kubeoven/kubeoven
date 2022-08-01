@@ -1,0 +1,14 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+
+.gitconfig
+.kubeoven
+.venv
+
+cluster.*
+
+DS_Store
+resources
+
+dist
+

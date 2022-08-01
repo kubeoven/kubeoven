@@ -1,0 +1,11 @@
+{
+    "python.formatting.provider": "black",
+    "python.linting.mypyEnabled": true,
+    "python.linting.enabled": true,
+    "yaml.schemas": {},
+    "python.testing.pytestArgs": [
+        "tests"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true
+}

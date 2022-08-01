@@ -1,0 +1,38 @@
+heat_template_version: 2018-08-31
+
+parameters:
+  stack:
+    type: string
+  public_network:
+    type: string
+    description: Public network
+
+resources:
+  main:
+    type: OS::Neutron::Net
+    properties:
+      name: { list_join: [".", [{ get_param: "stack" }, network]] }
+
+  subnet:
+    type: OS::Neutron::Subnet
+    properties:
+      name: { list_join: [".", [{ get_param: "stack" }, subnet]] }
+      network_id: { get_resource: main }
+      cidr: "10.1.0.0/24"
+      ip_version: 4
+
+  router:
+    type: OS::Neutron::Router
+    properties:
+      name: { list_join: [".", [{ get_param: "stack" }, router]] }
+      external_gateway_info: { network: { get_param: "public_network" } }
+
+  router_interface:
+    type: OS::Neutron::RouterInterface
+    properties:
+      router: { get_resource: router }
+      subnet: { get_resource: subnet }
+
+outputs:
+  main:
+    value: { get_resource: main }

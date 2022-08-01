@@ -1,0 +1,43 @@
+heat_template_version: 2018-08-31
+
+parameters:
+  stack:
+    type: string
+  image:
+    type: string
+  flavor:
+    type: string
+  security_group:
+    type: string
+  network: 
+    type: string
+  key_pair:
+    type: string
+  count:
+    type: string
+
+resources:
+  node:
+    type: OS::Heat::ResourceGroup
+    properties:
+      count: { get_param: count }
+      resource_def:
+        type: OS::Nova::Server
+        properties:
+          name: { list_join: ['.', [{get_param: 'stack'}, 'controlplane', '%index%']] }
+          key_name: { get_param: key_pair }
+          image: { get_param: image }
+          flavor: { get_param: flavor }
+          networks:
+            - port: { get_resource: port }
+
+  port:
+    type: OS::Neutron::Port
+    properties:
+      network: { get_param: network }
+      security_groups:
+        - { get_param: security_group }
+
+outputs:
+  address: 
+    value: {get_attr: [node, first_address]}

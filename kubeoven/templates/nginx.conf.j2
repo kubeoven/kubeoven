@@ -1,0 +1,25 @@
+user nginx;
+error_log stderr notice;
+worker_processes auto;
+
+events {
+    multi_accept on;
+    use epoll;
+    worker_connections 1024;
+}
+
+stream {
+    upstream kube_apiserver {
+        {% for address in addresses %}
+        server {{ address }}:6443;
+        {% endfor %}
+    }
+
+    server {
+        listen        6443;
+        proxy_pass    kube_apiserver;
+        proxy_timeout 10m;
+        proxy_connect_timeout 2s;
+
+    }
+}

@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-proxy
+  namespace: kube-system
+  labels:
+    component: nginx-proxy
+    tier: control-plane
+  annotations:
+    nginx-conf-checksum: "{{ conf_hash }}"
+spec:
+  hostNetwork: true
+  nodeSelector:
+    kubernetes.io/os: linux
+  priorityClassName: system-node-critical
+  containers:
+  - name: nginx-proxy
+    image: nginx:1.21
+    imagePullPolicy: IfNotPresent
+    resources:
+      requests:
+        cpu: 25m
+        memory: 32M
+    volumeMounts:
+    - mountPath: /etc/nginx
+      name: etc-nginx
+      readOnly: true
+  volumes:
+  - name: etc-nginx
+    hostPath:
+      path: /etc/kubernetes/nginx-proxy

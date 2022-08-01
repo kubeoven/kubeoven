@@ -1,0 +1,13 @@
+[Unit]
+Description=Docker Registry
+Documentation=https://github.com/distribution/distribution
+
+[Service]
+ExecStart=/usr/local/bin/registry \
+  serve /etc/docker/registry/config.yaml
+
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

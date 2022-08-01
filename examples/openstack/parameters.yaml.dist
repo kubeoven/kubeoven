@@ -1,0 +1,5 @@
+parameters:
+  image: ''
+  flavor: ''
+  public_network: ''
+  public_key: ''
